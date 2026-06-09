@@ -17,6 +17,14 @@ public class ConsumerEventService {
         return consumerEventRepository.save(consumerEvent);
     }
 
+    public ConsumerEventEntity createConsumerEventIdempotent(ConsumerEventEntity consumerEvent) {
+        Optional<ConsumerEventEntity> existingEvent = consumerEventRepository.findByEventId(consumerEvent.getEventId());
+        if (existingEvent.isPresent()) {
+            return existingEvent.get();
+        }
+        return consumerEventRepository.save(consumerEvent);
+    }
+
     public Optional<ConsumerEventEntity> getConsumerEventById(String eventId) {
         return consumerEventRepository.findByEventId(eventId);
     }
@@ -41,3 +49,4 @@ public class ConsumerEventService {
         consumerEventRepository.deleteById(eventId);
     }
 }
+

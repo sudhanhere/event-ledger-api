@@ -14,6 +14,9 @@ public class EventCreationResponse {
     @JsonProperty("eventId")
     private String eventId;
 
+    @JsonProperty("isDuplicate")
+    private boolean isDuplicate;
+
     @JsonProperty("timestamp")
     private LocalDateTime timestamp;
 
@@ -24,6 +27,15 @@ public class EventCreationResponse {
         this.success = success;
         this.message = message;
         this.eventId = eventId;
+        this.isDuplicate = false;
+        this.timestamp = LocalDateTime.now();
+    }
+
+    public EventCreationResponse(boolean success, String message, String eventId, boolean isDuplicate) {
+        this.success = success;
+        this.message = message;
+        this.eventId = eventId;
+        this.isDuplicate = isDuplicate;
         this.timestamp = LocalDateTime.now();
     }
 
@@ -51,6 +63,14 @@ public class EventCreationResponse {
         this.eventId = eventId;
     }
 
+    public boolean isDuplicate() {
+        return isDuplicate;
+    }
+
+    public void setDuplicate(boolean duplicate) {
+        isDuplicate = duplicate;
+    }
+
     public LocalDateTime getTimestamp() {
         return timestamp;
     }
@@ -65,7 +85,9 @@ public class EventCreationResponse {
                 "success=" + success +
                 ", message='" + message + '\'' +
                 ", eventId='" + eventId + '\'' +
+                ", isDuplicate=" + isDuplicate +
                 ", timestamp=" + timestamp +
                 '}';
     }
 }
+

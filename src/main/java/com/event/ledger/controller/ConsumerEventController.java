@@ -29,18 +29,32 @@ public class ConsumerEventController {
             @Valid @RequestBody ConsumerEvent consumerEvent) {
         try {
             ConsumerEventEntity entity = consumerEventConverter.toEntity(consumerEvent);
-            ConsumerEventEntity savedEvent = consumerEventService.createConsumerEvent(entity);
+            Optional<ConsumerEventEntity> existingEvent = consumerEventService.getConsumerEventById(entity.getEventId());
+            
+            if (existingEvent.isPresent()) {
+                EventCreationResponse response = new EventCreationResponse(
+                        true,
+                        "Consumer Event already exists (duplicate submission)",
+                        existingEvent.get().getEventId(),
+                        true
+                );
+                return ResponseEntity.status(HttpStatus.OK).body(response);
+            }
+            
+            ConsumerEventEntity savedEvent = consumerEventService.createConsumerEventIdempotent(entity);
             EventCreationResponse response = new EventCreationResponse(
                     true,
                     "Consumer Event created successfully",
-                    savedEvent.getEventId()
+                    savedEvent.getEventId(),
+                    false
             );
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (Exception e) {
             EventCreationResponse errorResponse = new EventCreationResponse(
                     false,
                     "Error creating consumer event: " + e.getMessage(),
-                    null
+                    null,
+                    false
             );
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
