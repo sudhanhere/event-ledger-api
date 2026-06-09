@@ -1,9 +1,9 @@
-package com.event.ledger.service;
+package com.event.ledger;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+@SpringBootTest(classes = EventLedgerApiApplication.class)
 class EventLedgerApiApplicationTests {
 
 	@Test
