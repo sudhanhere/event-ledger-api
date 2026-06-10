@@ -11,7 +11,8 @@ import org.springframework.context.annotation.ComponentScan;
 		"com.event.ledger.repository",
 		"com.event.ledger.model",
 		"com.event.ledger.dto",
-		"com.event.ledger.converter"
+		"com.event.ledger.converter",
+		"com.event.ledger.exception"
 })
 public class EventLedgerApiApplication {
 

@@ -5,11 +5,13 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Pattern;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.event.ledger.validator.ValidEventId;
 import java.util.Map;
 
 public class ConsumerEvent {
 
-    @NotBlank(message = "eventId is required")
+    @NotBlank(message = "Event id cannot be empty")
+    @ValidEventId
     @JsonProperty("eventId")
     private String eventId;
 
@@ -23,7 +25,7 @@ public class ConsumerEvent {
     private String type;
 
     @NotNull(message = "amount is required")
-    @Positive(message = "amount must be greater than 0")
+    @Positive(message = "amount cannot be zero or negative")
     @JsonProperty("amount")
     private Double amount;
 

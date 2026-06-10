@@ -38,7 +38,7 @@ public class ConsumerEventEntity {
 
     @Column(name = "amount", nullable = false)
     @NotNull(message = "amount is required")
-    @Positive(message = "amount must be greater than 0")
+    @Positive(message = "amount cannot be zero")
     @JsonProperty("amount")
     private Double amount;
 
