@@ -2,6 +2,7 @@ package com.event.ledger.controller;
 
 import com.event.ledger.converter.ConsumerEventConverter;
 import com.event.ledger.dto.EventCreationResponse;
+import com.event.ledger.dto.BalanceResponse;
 import com.event.ledger.model.ConsumerEvent;
 import com.event.ledger.model.ConsumerEventEntity;
 import com.event.ledger.service.ConsumerEventService;
@@ -104,6 +105,23 @@ public class ConsumerEventController {
                 .map(consumerEventConverter::toDto)
                 .toList();
         return ResponseEntity.ok(dtos);
+    }
+
+    @GetMapping("/account/{accountId}/balance")
+    public ResponseEntity<BalanceResponse> getAccountBalance(@PathVariable String accountId) {
+        try {
+            Double creditSum = consumerEventService.calculateCreditSum(accountId);
+            Double debitSum = consumerEventService.calculateDebitSum(accountId);
+            Double netBalance = consumerEventService.calculateNetBalance(accountId);
+
+            List<ConsumerEventEntity> events = consumerEventService.getConsumerEventsByAccountId(accountId);
+            String currency = events.isEmpty() ? "USD" : events.get(0).getCurrency();
+
+            BalanceResponse response = new BalanceResponse(accountId, netBalance, creditSum, debitSum, currency);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @DeleteMapping("/{eventId}")

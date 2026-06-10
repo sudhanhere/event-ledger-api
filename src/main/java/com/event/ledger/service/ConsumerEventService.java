@@ -48,5 +48,25 @@ public class ConsumerEventService {
     public void deleteConsumerEvent(String eventId) {
         consumerEventRepository.deleteById(eventId);
     }
+
+    public Double calculateNetBalance(String accountId) {
+        return consumerEventRepository.calculateNetBalanceByAccountId(accountId);
+    }
+
+    public Double calculateCreditSum(String accountId) {
+        List<ConsumerEventEntity> events = consumerEventRepository.findByAccountId(accountId);
+        return events.stream()
+                .filter(e -> "CREDIT".equals(e.getType()))
+                .mapToDouble(ConsumerEventEntity::getAmount)
+                .sum();
+    }
+
+    public Double calculateDebitSum(String accountId) {
+        List<ConsumerEventEntity> events = consumerEventRepository.findByAccountId(accountId);
+        return events.stream()
+                .filter(e -> "DEBIT".equals(e.getType()))
+                .mapToDouble(ConsumerEventEntity::getAmount)
+                .sum();
+    }
 }
 

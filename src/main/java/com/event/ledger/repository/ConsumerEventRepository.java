@@ -28,4 +28,9 @@ public interface ConsumerEventRepository extends JpaRepository<ConsumerEventEnti
     );
 
     Optional<ConsumerEventEntity> findByEventId(String eventId);
+
+    @Query("SELECT COALESCE(SUM(CASE WHEN ce.type = 'CREDIT' THEN ce.amount ELSE 0 END), 0.0) " +
+           "- COALESCE(SUM(CASE WHEN ce.type = 'DEBIT' THEN ce.amount ELSE 0 END), 0.0) " +
+           "FROM ConsumerEventEntity ce WHERE ce.accountId = :accountId")
+    Double calculateNetBalanceByAccountId(@Param("accountId") String accountId);
 }
