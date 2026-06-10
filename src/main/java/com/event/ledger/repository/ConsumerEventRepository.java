@@ -18,10 +18,10 @@ public interface ConsumerEventRepository extends JpaRepository<ConsumerEventEnti
 
     List<ConsumerEventEntity> findByType(String type);
 
-    @Query("SELECT ce FROM ConsumerEventEntity ce WHERE ce.accountId = :accountId ORDER BY ce.eventTimestamp DESC")
+    @Query("SELECT ce FROM ConsumerEventEntity ce WHERE ce.accountId = :accountId ORDER BY ce.eventTimestamp ASC")
     List<ConsumerEventEntity> findByAccountIdOrderByTimestamp(@Param("accountId") String accountId);
 
-    @Query("SELECT ce FROM ConsumerEventEntity ce WHERE ce.accountId = :accountId AND ce.type = :type ORDER BY ce.eventTimestamp DESC")
+    @Query("SELECT ce FROM ConsumerEventEntity ce WHERE ce.accountId = :accountId AND ce.type = :type ORDER BY ce.eventTimestamp ASC")
     List<ConsumerEventEntity> findByAccountIdAndTypeOrderByTimestamp(
             @Param("accountId") String accountId,
             @Param("type") String type
